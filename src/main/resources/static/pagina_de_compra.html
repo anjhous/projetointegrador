@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Completo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #e0e0e0; /* Cinza mais escuro */
+            color: #000000; /* Preto */
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #000000;
+        }
+        
+        h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            color: #000000;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #000000;
+            font-weight: 700;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #000000;
+        }
+        
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .row .form-group {
+            flex: 1;
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #333333;
+        }
+        
+        .summary {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: #000000;
+        }
+        
+        .total {
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            color: #000000;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .checkbox-group label {
+            font-weight: 700;
+            margin-bottom: 0;
+            color: #000000;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        ::placeholder {
+            color: #888;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FINALIZAR COMPRA</h1>
+        
+        <form>
+            <h2>INFORMAÇÕES DE ENTREGA</h2>
+            
+            <div class="row">
+                <div class="form-group">
+                    <label for="first-name">Nome</label>
+                    <input type="text" id="first-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Sobrenome</label>
+                    <input type="text" id="last-name" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Endereço</label>
+                <input type="text" id="address" placeholder="Rua, número" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="address2">Complemento (opcional)</label>
+                <input type="text" id="address2" placeholder="Apartamento, andar, etc.">
+            </div>
+            
+            <div class="row">
+                <div class="form-group">
+                    <label for="city">Cidade</label>
+                    <input type="text" id="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">Estado</label>
+                    <select id="state" required>
+                        <option value="">Selecione</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <!-- outros estados -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="zip">CEP</label>
+                    <input type="text" id="zip" placeholder="00000-000" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Telefone</label>
+                <input type="tel" id="phone" placeholder="(00) 00000-0000" required>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="same-billing">
+                <label for="same-billing">Endereço de cobrança é o mesmo de entrega</label>
+            </div>
+            
+            <div id="billing-address" class="hidden">
+                <h2>ENDEREÇO DE COBRANÇA</h2>
+                
+                <div class="form-group">
+                    <label for="billing-address">Endereço</label>
+                    <input type="text" id="billing-address">
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="billing-city">Cidade</label>
+                        <input type="text" id="billing-city">
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-state">Estado</label>
+                        <select id="billing-state">
+                            <option value="">Selecione</option>
+                            <!-- opções de estado -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-zip">CEP</label>
+                        <input type="text" id="billing-zip">
+                    </div>
+                </div>
+            </div>
+            
+            <h2>PAGAMENTO</h2>
+            
+            <div class="form-group">
+                <label for="card-number">Número do Cartão</label>
+                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+            </div>
+            
+            <div class="row">
+                <div class="form-group">
+                    <label for="expiry">Validade</label>
+                    <input type="text" id="expiry" placeholder="MM/AA" required>
+                </div>
+                <div class="form-group">
+                    <label for="cvc">CVC</label>
+                    <input type="text" id="cvc" placeholder="123" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Nome no Cartão</label>
+                <input type="text" id="name" placeholder="Nome como impresso no cartão" required>
+            </div>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <span>Subtotal</span>
+                    <span>R$ 99,90</span>
+                </div>
+                <div class="summary-item">
+                    <span>Frete</span>
+                    <span>Grátis</span>
+                </div>
+                <div class="summary-item">
+                    <span>Desconto</span>
+                    <span>-R$ 0,00</span>
+                </div>
+                <div class="summary-item total">
+                    <span>TOTAL</span>
+                    <span>R$ 99,90</span>
+                </div>
+            </div>
+            
+            <button type="submit">FINALIZAR COMPRA</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('same-billing').addEventListener('change', function() {
+            const billingAddress = document.getElementById('billing-address');
+            if (this.checked) {
+                billingAddress.classList.add('hidden');
+            } else {
+                billingAddress.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

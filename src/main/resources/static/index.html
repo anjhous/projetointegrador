@@ -1,105 +1,575 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Usuários - Demo</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        max-width: 600px;
-        margin: 40px auto;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produto Futurista</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    .about-popout {
+  display: none;
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  background: #c1b6b6d7;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  z-index: 1000;
+  max-width: 400px;
+  animation: slideIn 0.3s ease;
+}
+
+.about-popout.active {
+  display: block;
+}
+
+.about-popout h3 {
+  margin-bottom: 1rem;
+  color: #000;
+}
+
+.about-popout p {
+  margin-bottom: 1rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.about-popout .close-about {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .about-popout {
+    left: 1rem;
+    bottom: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #d3d3d3;
+      color: #000000;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background-color: #f5f8fa;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .logo-whale {
+      width: 32px;
+      height: 32px;
+      margin-top: 5px;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+
+    nav a:hover {
+      color: #000;
+    }
+
+    section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .hero {
+      text-align: center;
+      background: #f0f4f8;
+      border-radius: 1rem;
+      padding: 4rem 2rem;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    .close-btn {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .form-container {
+      margin-top: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-container input:focus {
+      outline: none;
+      border-color: #000;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 1rem;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-container button:hover {
+      background-color: #333;
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .form-footer a {
+      color: #000;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #f5f5f5;
+      color: #666;
+    }
+
+    /* Contact Popout Styles */
+    .contact-popout {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      z-index: 1000;
+      max-width: 300px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .contact-popout.active {
+      display: block;
+    }
+
+    .contact-popout h3 {
+      margin-bottom: 1rem;
+      color: #000;
+    }
+
+    .contact-popout p {
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+
+    .contact-popout .close-contact {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #666;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
       }
-
-      h2 {
-        margin-top: 30px;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 5px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
 
-      input,
-      button {
-        display: block;
-        margin: 10px 0;
-        padding: 8px;
-        width: 100%;
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
       }
-
-      .resposta {
-        margin-top: 10px;
-        font-weight: bold;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
 
-      ul {
-        padding-left: 20px;
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
-    </style>
-  </head>
-  <body>
-    <h1>Sistema de Usuários</h1>
-
-    <h2>Criar usuário</h2>
-    <input type="text" id="nome" placeholder="Nome" />
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="senha" placeholder="Senha" />
-    <button onclick="criarUsuario()">Cadastrar</button>
-    <div class="resposta" id="respostaCadastro"></div>
-
-    <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email" />
-    <input type="password" id="loginSenha" placeholder="Senha" />
-    <button onclick="fazerLogin()">Entrar</button>
-    <div class="resposta" id="respostaLogin"></div>
-
-    <h2>Todos os usuários</h2>
-    <button onclick="listarUsuarios()">Listar usuários</button>
-    <ul id="listaUsuarios"></ul>
-
-    <script>
-      function criarUsuario() {
-        const nome = document.getElementById("nome").value;
-        const email = document.getElementById("email").value;
-        const senha = document.getElementById("senha").value;
-
-        fetch("/usuarios/criar", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nome, email, senha }),
-        })
-          .then((res) => res.text())
-          .then((data) => {
-            document.getElementById("respostaCadastro").innerText = data;
-          });
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
 
-      function fazerLogin() {
-        const email = document.getElementById("loginEmail").value;
-        const senha = document.getElementById("loginSenha").value;
-
-        fetch("/usuarios/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha }),
-        })
-          .then((res) => res.text())
-          .then((data) => {
-            document.getElementById("respostaLogin").innerText = data;
-          });
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
       }
-
-      function listarUsuarios() {
-        fetch("/usuarios/todos")
-          .then((res) => res.json())
-          .then((usuarios) => {
-            const lista = document.getElementById("listaUsuarios");
-            lista.innerHTML = "";
-            usuarios.forEach((u) => {
-              const li = document.createElement("li");
-              li.textContent = `${u.nome} (${u.email})`;
-              lista.appendChild(li);
-            });
-          });
+      nav {
+        margin-top: 1rem;
       }
-    </script>
-  </body>
+      .modal-content {
+        width: 90%;
+        padding: 1.5rem;
+      }
+      .contact-popout {
+        right: 1rem;
+        bottom: 1rem;
+        max-width: calc(100% - 2rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="aboutPopout" class="about-popout">
+    <span class="close-about">&times;</span>
+    <h3>Sobre a Beluga</h3>
+    <p>A Beluga é um dispositivo vestível, sem tela, focado em monitoramento pessoal inteligente. Seu objetivo é oferecer acompanhamento da saúde física, emocional e ambiental de forma discreta, intuitiva e não invasiva.</p>
+    <p>Diferente de smartwatches, a Beluga funciona como um acessório minimalista, com interações sutis e integração com um app complementar.</p>
+  </div>
+  
+  <header>
+    <div class="logo-container">
+      <div class="logo-circle">
+        <svg class="logo-whale" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20,50 Q30,30 50,30 Q70,30 80,50" stroke="white" stroke-width="4" fill="none" />
+          <path d="M80,50 Q90,50 85,70 Q80,90 60,85 Q40,80 20,70 Q10,60 20,50" stroke="white" stroke-width="4" fill="none" />
+          <path d="M10,60 Q0,50 10,40" stroke="white" stroke-width="4" fill="none" />
+          <circle cx="35" cy="45" r="3" fill="white" />
+        </svg>
+      </div>
+      <h1>Beluga</h1>
+    </div>
+    <nav>
+      <a href="#sobre">Sobre</a>
+      <a href="#beneficios">Benefícios</a>
+      <a id="loginLink">Login</a>
+      <a id="registerLink">Cadastro</a>
+      <a id="contactLink">Contato</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Produto Inovador</h2>
+    <p>Sua consciência, sua tecnologia. Beluga – onde o corpo encontra o agora.</p>
+    <button id="buyButton" style="margin-top: 20px; padding: 12px 30px; background-color: #000; color: #fff; border: none; border-radius: 30px; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;">Comprar Agora</button>
+  </section>
+  <!-- Modal de Login -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Login</h3>
+      <div class="form-container">
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Senha</label>
+            <input type="password" id="loginPassword" placeholder="Sua senha" required>
+          </div>
+          <button type="submit">Entrar</button>
+          <div class="form-footer">
+            <a href="#recuperar-senha">Esqueceu sua senha?</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Cadastro -->
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Cadastro</h3>
+      <div class="form-container">
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="registerName">Nome completo</label>
+            <input type="text" id="registerName" placeholder="Seu nome completo" required>
+          </div>
+          <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Senha</label>
+            <input type="password" id="registerPassword" placeholder="Crie uma senha" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label for="registerConfirmPassword">Confirme sua senha</label>
+            <input type="password" id="registerConfirmPassword" placeholder="Repita sua senha" required>
+          </div>
+          <button type="submit">Cadastrar</button>
+          <div class="form-footer">
+            Já tem uma conta? <a id="switchToLogin">Faça login</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popout de Contato -->
+  <div id="contactPopout" class="contact-popout">
+    <span class="close-contact">&times;</span>
+    <h3>Informações de Contato</h3>
+    <p><strong>Colégio Adélia</strong></p>
+    <p>Telefone: (13) 3366-5678</p>
+    <p>Email: contato@colegioadelia.com.br</p>
+  </div>
+
+  <footer id="contato">
+    <p>&copy; 2025 Beluga. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    // Controle dos modais
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const loginLink = document.getElementById('loginLink');
+    const registerLink = document.getElementById('registerLink');
+    const contactLink = document.getElementById('contactLink');
+    const switchToLogin = document.getElementById('switchToLogin');
+    const closeBtns = document.querySelectorAll('.close-btn');
+    const contactPopout = document.getElementById('contactPopout');
+    const closeContact = document.querySelector('.close-contact');
+
+    // Abrir modal de login
+    loginLink.addEventListener('click', () => {
+      loginModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Abrir modal de cadastro
+    registerLink.addEventListener('click', () => {
+      registerModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Abrir popout de contato
+    contactLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      contactPopout.classList.add('active');
+    });
+
+    // Fechar modais
+    closeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        registerModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      });
+    });
+
+    // Fechar popout de contato
+    closeContact.addEventListener('click', () => {
+      contactPopout.classList.remove('active');
+    });
+
+    // Trocar para login a partir do cadastro
+    switchToLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      registerModal.style.display = 'none';
+      loginModal.style.display = 'flex';
+    });
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', (e) => {
+      if (e.target === loginModal) {
+        loginModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+      if (e.target === registerModal) {
+        registerModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+      if (e.target === contactPopout) {
+        contactPopout.classList.remove('active');
+      }
+    });
+
+    // Validação dos formulários
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      
+      if (email && password) {
+        alert('Login realizado com sucesso! Redirecionando...');
+        loginModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      } else {
+        alert('Por favor, preencha todos os campos.');
+      }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('registerName').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('registerConfirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        alert('As senhas não coincidem!');
+        return;
+      }
+      
+      if (password.length < 6) {
+        alert('A senha deve ter pelo menos 6 caracteres.');
+        return;
+      }
+      
+      if (name && email && password) {
+        alert('Cadastro realizado com sucesso! Bem-vindo(a) ' + name);
+        registerModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      } else {
+        alert('Por favor, preencha todos os campos.');
+      }
+    });
+    // Controle do popout sobre
+const aboutLink = document.querySelector('a[href="#sobre"]');
+const aboutPopout = document.getElementById('aboutPopout');
+const closeAbout = document.querySelector('.close-about');
+
+// Abrir popout de sobre
+aboutLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  aboutPopout.classList.add('active');
+});
+
+// Fechar popout de sobre
+closeAbout.addEventListener('click', () => {
+  aboutPopout.classList.remove('active');
+});
+
+// Fechar ao clicar fora
+window.addEventListener('click', (e) => {
+  if (e.target === aboutPopout) {
+    aboutPopout.classList.remove('active');
+  }
+});
+// Botão de compra
+document.getElementById('buyButton').addEventListener('click', function() {
+  // Abre uma nova página em uma nova aba
+  window.open('pagina_de_compra.html', '_blank');
+});
+  </script>
+</body>
 </html>
