@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Completo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #e0e0e0;
+            color: #000000;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+        
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .row .form-group {
+            flex: 1;
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #333333;
+        }
+        
+        .summary {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .total {
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .checkbox-group label {
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .payment-method {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            border-color: #999;
+        }
+        
+        .payment-method.selected {
+            border-color: #000;
+            background-color: #f9f9f9;
+        }
+        
+        .payment-method .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .payment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .payment-content {
+            padding-top: 10px;
+        }
+        
+        .pix-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .pix-qrcode {
+            width: 200px;
+            height: 200px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pix-qrcode img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .pix-code {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            font-family: monospace;
+            word-break: break-all;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .pix-instructions {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+            width: 100%;
+        }
+        
+        .pix-instructions p {
+            margin-bottom: 8px;
+        }
+        
+        .copy-btn {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #333;
+        }
+        
+        ::placeholder {
+            color: #888;
+            opacity: 1;
+        }
+        
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        @media (max-width: 400px) {
+            .row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FINALIZAR COMPRA</h1>
+        
+        <form id="checkout-form">
+            <h2>INFORMAÇÕES DE ENTREGA</h2>
+            
+            <div class="row">
+                <div class="form-group">
+                    <label for="first-name">Nome</label>
+                    <input type="text" id="first-name" required aria-required="true">
+                    <div class="error.ConcurrentModificationException id="first-name-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Sobrenome</label>
+                    <input type="text" id="last-name" required aria-required="true">
+                    <div class="error" id="last-name-error">Por favor, insira um sobrenome válido (apenas letras e espaços).</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Endereço</label>
+                <input type="text" id="address" placeholder="Rua, número" required aria-required="true">
+                <div class="error" id="address-error">Por favor, insira um endereço válido.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address2">Complemento (opcional)</label>
+                <input type="text" id="address2" placeholder="Apartamento, andar, etc.">
+            </div>
+            
+            <div class="row">
+                <div class="form-group">
+                    <label for="city">Cidade</label>
+                    <input type="text" id="city" required aria-required="true">
+                    <div class="error" id="city-error">Por favor, insira uma cidade válida (apenas letras e espaços).</div>
+                </div>
+                <div class="form-group">
+                    <label for="state">Estado</label>
+                    <select id="state" required aria-required="true">
+                        <option value="">Selecione</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                    <div class="error" id="state-error">Por favor, selecione um estado.</div>
+                </div>
+                <div class="form-group">
+                    <label for="zip">CEP</label>
+                    <input type="text" id="zip" placeholder="00000-000" required aria-required="true">
+                    <div class="error" id="zip-error">Por favor, insira um CEP válido (00000-000).</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Telefone</label>
+                <input type="text" id="phone" placeholder="(00) 00000-0000" required aria-required="true">
+                <div class="error" id="phone-error">Por favor, insira um telefone válido ((00) 00000-0000).</div>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="same-billing" aria-label="Endereço de cobrança é o mesmo de entrega">
+                <label for="same-billing">Endereço de cobrança é o mesmo de entrega</label>
+            </div>
+            
+            <div id="billing-address" class="hidden">
+                <h2>ENDEREÇO DE COBRANÇA</h2>
+                
+                <div class="form-group">
+                    <label for="billing-address">Endereço</label>
+                    <input type="text" id="billing-address">
+                    <div class="error" id="billing-address-error">Por favor, insira um endereço válido.</div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="billing-city">Cidade</label>
+                        <input type="text" id="billing-city">
+                        <div class="error" id="billing-city-error">Por favor, insira uma cidade válida (apenas letras e espaços).</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-state">Estado</label>
+                        <select id="billing-state">
+                            <option value="">Selecione</option>
+                            <option value="AC">Acre</option>
+                            <option value="AL">Alagoas</option>
+                            <option value="AP">Amapá</option>
+                            <option value="AM">Amazonas</option>
+                            <option value="BA">Bahia</option>
+                            <option value="CE">Ceará</option>
+                            <option value="DF">Distrito Federal</option>
+                            <option value="ES">Espírito Santo</option>
+                            <option value="GO">Goiás</option>
+                            <option value="MA">Maranhão</option>
+                            <option value="MT">Mato Grosso</option>
+                            <option value="MS">Mato Grosso do Sul</option>
+                            <option value="MG">Minas Gerais</option>
+                            <option value="PA">Pará</option>
+                            <option value="PB">Paraíba</option>
+                            <option value="PR">Paraná</option>
+                            <option value="PE">Pernambuco</option>
+                            <option value="PI">Piauí</option>
+                            <option value="RJ">Rio de Janeiro</option>
+                            <option value="RN">Rio Grande do Norte</option>
+                            <option value="RS">Rio Grande do Sul</option>
+                            <option value="RO">Rondônia</option>
+                            <option value="RR">Roraima</option>
+                            <option value="SC">Santa Catarina</option>
+                            <option value="SP">São Paulo</option>
+                            <option value="SE">Sergipe</option>
+                            <option value="TO">Tocantins</option>
+                        </select>
+                        <div class="error" id="billing-state-error">Por favor, selecione um estado.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-zip">CEP</label>
+                        <input type="text" id="billing-zip">
+                        <div class="error" id="billing-zip-error">Por favor, insira um CEP válido (00000-000).</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>MÉTODO DE PAGAMENTO</h2>
+            
+            <input type="radio" name="payment-method" value="pix" checked class="hidden" id="pix-radio">
+            <input type="radio" name="payment-method" value="card" class="hidden" id="card-radio">
+            
+            <div class="payment-method selected" id="pix-method" role="button" aria-pressed="true" tabindex="0">
+                <div class="payment-header">
+                    <img src="imagens/icons8-foto-30.png">
+                    <h3>PIX</h3>
+                </div>
+                <div class="payment-content">
+                    <p>Pague instantaneamente com PIX</p>
+                    <div class="pix-container">
+                        <div class="pix-qrcode">
+                            <!-- QR Code de exemplo - substitua por um gerado dinamicamente em produção -->
+                            <img src="imagens/websiteQRCode_noFrame.png" alt="QR Code PIX">
+                        </div>
+                        <div class="pix-code">
+                            Código PIX: 00020126360014BR.GOV.BCB.PIX0114+5567999999999520400005303986540510.005802BR5913LOJAMINIMALISTA6008BRASILIA62070503***6304A1B2
+                            <button type="button" class="copy-btn">Copiar Código</button>
+                        </div>
+                    </div>
+                    <div class="pix-instructions">
+                        <p><strong>Instruções para pagamento:</strong></p>
+                        <p>1. Abra o app do seu banco ou carteira digital</p>
+                        <p>2. Acesse a área PIX e escolha "Pagar com QR Code"</p>
+                        <p>3. Escaneie o código acima ou cole o código copiado</p>
+                        <p>4. Confirme o pagamento</p>
+                        <p>5. Seu pedido será processado automaticamente</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-method" id="card-method" role="button" aria-pressed="false" tabindex="0">
+                <div class="payment-header">
+                    <span class="icon">💳</span>
+                    <h3>Cartão de Crédito</h3>
+                </div>
+                <div class="payment-content hidden" id="card-payment">
+                    <div class="form-group">
+                        <label for="card-number">Número do Cartão</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+                        <div class="error" id="card-number-error">Por favor, insira um número de cartão válido (16 dígitos).</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="expiry">Validade</label>
+                            <input type="text" id="expiry" placeholder="MM/AA">
+                            <div class="error" id="expiry-error">Por favor, insira uma validade válida (MM/AA).</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvc">CVC</label>
+                            <input type="text" id="cvc" placeholder="123">
+                            <div class="error" id="cvc-error">Por favor, insira um CVC válido (3-4 dígitos).</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="name">Nome no Cartão</label>
+                        <input type="text" id="name" placeholder="Nome como impresso no cartão">
+                        <div class="error" id="name-error">Por favor, insira o nome como impresso no cartão (apenas letras e espaços).</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <span>Subtotal</span>
+                    <span id="subtotal">R$ 00,00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Frete</span>
+                    <span id="shipping">Grátis</span>
+                </div>
+                <div class="summary-item">
+                    <span>Desconto</span>
+                    <span id="discount">-R$ 00,00</span>
+                </div>
+                <div class="summary-item total">
+                    <span>TOTAL</span>
+                    <span id="total">R$ 00,00</span>
+                </div>
+            </div>
+            
+            <button type="submit">FINALIZAR COMPRA</button>
+        </form>
+    </div>
+
+    <script>
+        // Funções de validação de entrada
+        function restrictToLettersAndSpaces(input) {
+            input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+        }
+
+        function restrictToNumbers(input) {
+            input.value = input.value.replace(/\D/g, '');
+        }
+
+        function formatCEP(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.slice(0, 5) + '-' + value.slice(5, 8);
+            }
+            input.value = value;
+        }
+
+        function formatPhone(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = '(' + value.slice(0, 2) + ') ' + value.slice(2);
+            }
+            if (value.length > 9) {
+                value = value.slice(0, 9) + '-' + value.slice(9, 13);
+            }
+            input.value = value;
+        }
+
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                value = value.slice(0, 4) + ' ' + value.slice(4);
+            }
+            if (value.length > 9) {
+                value = value.slice(0, 9) + ' ' + value.slice(9);
+            }
+            if (value.length > 14) {
+                value = value.slice(0, 14) + ' ' + value.slice(14, 18);
+            }
+            input.value = value;
+        }
+
+        function formatExpiry(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            input.value = value;
+        }
+
+        // Aplicar restrições em tempo real
+        document.getElementById('first-name').addEventListener('input', function() {
+            restrictToLettersAndSpaces(this);
+        });
+
+        document.getElementById('last-name').addEventListener('input', function() {
+            restrictToLettersAndSpaces(this);
+        });
+
+        document.getElementById('address').addEventListener('input', function() {
+            // Permite letras, números e alguns caracteres comuns em endereços (ex.: nº, /)
+            this.value = this.value.replace(/[^a-zA-Z0-9\s,ºª\/-]/g, '');
+        });
+
+        document.getElementById('city').addEventListener('input', function() {
+            restrictToLettersAndSpaces(this);
+        });
+
+        document.getElementById('zip').addEventListener('input', function() {
+            formatCEP(this);
+        });
+
+        document.getElementById('phone').addEventListener('input', function() {
+            formatPhone(this);
+        });
+
+        document.getElementById('billing-address').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z0-9\s,ºª\/-]/g, '');
+        });
+
+        document.getElementById('billing-city').addEventListener('input', function() {
+            restrictToLettersAndSpaces(this);
+        });
+
+        document.getElementById('billing-zip').addEventListener('input', function() {
+            formatCEP(this);
+        });
+
+        document.getElementById('card-number').addEventListener('input', function() {
+            formatCardNumber(this);
+        });
+
+        document.getElementById('expiry').addEventListener('input', function() {
+            formatExpiry(this);
+        });
+
+        document.getElementById('cvc').addEventListener('input', function() {
+            restrictToNumbers(this);
+        });
+
+        document.getElementById('name').addEventListener('input', function() {
+            restrictToLettersAndSpaces(this);
+        });
+
+        // Alternar entre endereço de cobrança
+        document.getElementById('same-billing').addEventListener('change', function() {
+            const billingAddress = document.getElementById('billing-address');
+            if (this.checked) {
+                billingAddress.classList.add('hidden');
+            } else {
+                billingAddress.classList.remove('hidden');
+            }
+        });
+
+        // Alternar entre métodos de pagamento
+        const pixMethod = document.getElementById('pix-method');
+        const cardMethod = document.getElementById('card-method');
+        const cardPayment = document.getElementById('card-payment');
+        const pixRadio = document.getElementById('pix-radio');
+        const cardRadio = document.getElementById('card-radio');
+
+        function selectPix() {
+            pixMethod.classList.add('selected');
+            cardMethod.classList.remove('selected');
+            cardPayment.classList.add('hidden');
+            pixRadio.checked = true;
+            pixMethod.setAttribute('aria-pressed', 'true');
+            cardMethod.setAttribute('aria-pressed', 'false');
+        }
+
+        function selectCard() {
+            cardMethod.classList.add('selected');
+            pixMethod.classList.remove('selected');
+            cardPayment.classList.remove('hidden');
+            cardRadio.checked = true;
+            cardMethod.setAttribute('aria-pressed', 'true');
+            pixMethod.setAttribute('aria-pressed', 'false');
+        }
+
+        pixMethod.addEventListener('click', selectPix);
+        cardMethod.addEventListener('click', selectCard);
+
+        // Suporte a navegação por teclado
+        pixMethod.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectPix();
+            }
+        });
+
+        cardMethod.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectCard();
+            }
+        });
+
+        // Botão copiar código PIX com fallback
+        document.querySelector('.copy-btn').addEventListener('click', function() {
+            const pixCode = document.querySelector('.pix-code').textContent.replace('Código PIX: ', '').replace('Copiar Código', '').trim();
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(pixCode).then(() => {
+                    this.textContent = 'Código Copiado!';
+                    setTimeout(() => this.textContent = 'Copiar Código', 2000);
+                });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = pixCode;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                this.textContent = 'Código Copiado!';
+                setTimeout(() => this.textContent = 'Copiar Código', 2000);
+            }
+        });
+
+        // Validação do formulário ao enviar
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            // Validação dos campos de entrega
+            const fields = [
+                { id: 'first-name', errorId: 'first-name-error', validator: val => /^[a-zA-Z\s]+$/.test(val) && val.trim().length > 0 },
+                { id: 'last-name', errorId: 'last-name-error', validator: val => /^[a-zA-Z\s]+$/.test(val) && val.trim().length > 0 },
+                { id: 'address', errorId: 'address-error', validator: val => /^[a-zA-Z0-9\s,ºª\/-]+$/.test(val) && val.trim().length > 0 },
+                { id: 'city', errorId: 'city-error', validator: val => /^[a-zA-Z\s]+$/.test(val) && val.trim().length > 0 },
+                { id: 'state', errorId: 'state-error', validator: val => val !== '' },
+                { id: 'zip', errorId: 'zip-error', validator: val => /^\d{5}-\d{3}$/.test(val) },
+                { id: 'phone', errorId: 'phone-error', validator: val => /^\(\d{2}\) \d{5}-\d{4}$/.test(val) }
+            ];
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const error = document.getElementById(field.errorId);
+                if (!field.validator(input.value)) {
+                    error.style.display = 'block';
+                    isValid = false;
+                } else {
+                    error.style.display = 'none';
+                }
+            });
+
+            // Validação do endereço de cobrança, se visível
+            if (!document.getElementById('same-billing').checked) {
+                const billingFields = [
+                    { id: 'billing-address', errorId: 'billing-address-error', validator: val => /^[a-zA-Z0-9\s,ºª\/-]+$/.test(val) && val.trim().length > 0 },
+                    { id: 'billing-city', errorId: 'billing-city-error', validator: val => /^[a-zA-Z\s]+$/.test(val) && val.trim().length > 0 },
+                    { id: 'billing-state', errorId: 'billing-state-error', validator: val => val !== '' },
+                    { id: 'billing-zip', errorId: 'billing-zip-error', validator: val => /^\d{5}-\d{3}$/.test(val) || val.trim() === '' }
+                ];
+
+                billingFields.forEach(field => {
+                    const input = document.getElementById(field.id);
+                    const error = document.getElementById(field.errorId);
+                    if (!field.validator(input.value)) {
+                        error.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        error.style.display = 'none';
+                    }
+                });
+            }
+
+            // Validação do cartão de crédito, se selecionado
+            if (cardRadio.checked) {
+                const cardFields = [
+                    { id: 'card-number', errorId: 'card-number-error', validator: val => /^\d{4} \d{4} \d{4} \d{4}$/.test(val) },
+                    { id: 'expiry', errorId: 'expiry-error', validator: val => /^\d听得懂中文吗？{2}\/\d{2}$/.test(val) },
+                    { id: 'cvc', errorId: 'cvc-error', validator: val => /^\d{3,4}$/.test(val) },
+                    { id: 'name', errorId: 'name-error', validator: val => /^[a-zA-Z\s]+$/.test(val) && val.trim().length > 0 }
+                ];
+
+                cardFields.forEach(field => {
+                    const input = document.getElementById(field.id);
+                    const error = document.getElementById(field.errorId);
+                    if (!field.validator(input.value)) {
+                        error.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        error.style.display = 'none';
+                    }
+                });
+            }
+
+            if (isValid) {
+                // Em produção, envie os dados para um backend seguro (ex.: Stripe para cartão, API PIX para QR code)
+                console.log('Formulário válido, enviando dados...');
+                // Exemplo: fetch('/api/checkout', { method: 'POST', body: new FormData(this) });
+            }
+        });
+
+        // Atualizar resumo dinamicamente (exemplo com valores fixos, substitua por dados do carrinho)
+        function updateSummary() {
+            const subtotal = 0; // Substitua por dados do carrinho
+            const shipping = 0; // Calcule com base no endereço
+            const discount = 0; // Aplique cupom, se houver
+            const total = subtotal + shipping - discount;
+
+            document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('shipping').textContent = shipping === 0 ? 'Grátis' : `R$ ${shipping.toFixed(2).replace('.', ',')}`;
+            document.getElementById('discount').textContent = `-R$ ${discount.toFixed(2).replace('.', ',')}`;
+            document.getElementById('total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        updateSummary();
+
+        // NOTA: Para QR Code PIX dinâmico, use uma biblioteca como qrcode.js ou uma API de backend
+        // Exemplo com qrcode.js:
+        // <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    </script>
+</body>
+</html>
